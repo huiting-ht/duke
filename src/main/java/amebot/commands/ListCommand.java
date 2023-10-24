@@ -3,7 +3,15 @@ package amebot.commands;
 import amebot.common.Messages;
 import amebot.tasks.Task;
 
+/**
+ * ListCommand class
+ *
+ * <p>Command to list all tasks
+ */
 public class ListCommand extends Command {
+    /**
+     * ListCommand constructor
+     */
     public ListCommand() {
         if (tasks.isEmpty()) {
             logs.add(Messages.EMPTY_LIST);
@@ -12,6 +20,9 @@ public class ListCommand extends Command {
         }
     }
 
+    /**
+     * Saves the logs for output
+     */
     public void saveLogs() {
         int itemNum = 1;
 

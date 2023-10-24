@@ -29,7 +29,7 @@ Successfully added to list!
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
-[EVENT] [ ] GO-KART AROUND TOKYO (FROM: WEDNESDAY 1PM TO: 3PM)
+[EVENT] [ ] GO-KART AROUND TOKYO (FROM: 6 JAN 2025 (MON) 5:30PM TO: 6 JAN 2025 (MON) 8:30PM)
 Successfully added to list!
 2 item(s) in list~
 --------------------------------------------------------------------------------
@@ -47,13 +47,13 @@ Successfully added to list!
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
-[EVENT] [ ] MAKE YOUR OWN TAKOYAKI (FROM: SUNDAY 1PM TO: 3PM)
+[EVENT] [ ] MAKE YOUR OWN TAKOYAKI (FROM: 11 FEB 2025 (TUE) 1PM TO: 11 FEB 2025 (TUE) 3PM)
 Successfully added to list!
 5 item(s) in list~
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
-[EVENT] [ ] LEARN THE ART OF TEA CEREMONY (FROM: SEPTEMBER 15TH 9AM TO: 11AM)
+[EVENT] [ ] LEARN THE ART OF TEA CEREMONY (FROM: 21 FEB 2025 (FRI) 9AM TO: 21 FEB 2025 (FRI) 11:30AM)
 Successfully added to list!
 6 item(s) in list~
 --------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ Successfully added to list!
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
-[EVENT] [ ] GO CHERRY BLOSSOM VIEWING (FROM: TBC 7AM TO: 8AM)
+[EVENT] [ ] GO CHERRY BLOSSOM VIEWING (FROM: 30 MAR 2025 (SUN) TO: 31 MAR 2025 (MON))
 Successfully added to list!
 8 item(s) in list~
 --------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ Successfully added to list!
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
-[DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: FRIDAY)
+[DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: 31 MAR 2025 (MON))
 Successfully added to list!
 11 item(s) in list~
 --------------------------------------------------------------------------------
@@ -103,16 +103,16 @@ Successfully added to list!
 ________________________________________________________________________________
 Item(s) in current list:
 1. [TODO] [ ] RIDE A SHINKANSEN
-2. [EVENT] [ ] GO-KART AROUND TOKYO (FROM: WEDNESDAY 1PM TO: 3PM)
+2. [EVENT] [ ] GO-KART AROUND TOKYO (FROM: 6 JAN 2025 (MON) 5:30PM TO: 6 JAN 2025 (MON) 8:30PM)
 3. [TODO] [ ] ENTER UNIVERSAL STUDIOS JAPAN
 4. [TODO] [ ] VISIT AN ARCADE
-5. [EVENT] [ ] MAKE YOUR OWN TAKOYAKI (FROM: SUNDAY 1PM TO: 3PM)
-6. [EVENT] [ ] LEARN THE ART OF TEA CEREMONY (FROM: SEPTEMBER 15TH 9AM TO: 11AM)
+5. [EVENT] [ ] MAKE YOUR OWN TAKOYAKI (FROM: 11 FEB 2025 (TUE) 1PM TO: 11 FEB 2025 (TUE) 3PM)
+6. [EVENT] [ ] LEARN THE ART OF TEA CEREMONY (FROM: 21 FEB 2025 (FRI) 9AM TO: 21 FEB 2025 (FRI) 11:30AM)
 7. [TODO] [ ] VISIT AN IZAKAYA
-8. [EVENT] [ ] GO CHERRY BLOSSOM VIEWING (FROM: TBC 7AM TO: 8AM)
+8. [EVENT] [ ] GO CHERRY BLOSSOM VIEWING (FROM: 30 MAR 2025 (SUN) TO: 31 MAR 2025 (MON))
 9. [TODO] [ ] CLIMB MOUNT FUJI
 10. [TODO] [ ] VISIT BAMBOO FOREST
-11. [DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: FRIDAY)
+11. [DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: 31 MAR 2025 (MON))
 12. [TODO] [ ] VISIT AN ONSEN
 13. [TODO] [ ] TEST DELETE METHOD
 --------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ You've completed this item!
 
 ________________________________________________________________________________
 You've completed this item!
-[EVENT] [✓] MAKE YOUR OWN TAKOYAKI (FROM: SUNDAY 1PM TO: 3PM)
+[EVENT] [✓] MAKE YOUR OWN TAKOYAKI (FROM: 11 FEB 2025 (TUE) 1PM TO: 11 FEB 2025 (TUE) 3PM)
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
@@ -134,12 +134,12 @@ You've completed this item!
 
 ________________________________________________________________________________
 You've completed this item!
-[DEADLINE] [✓] SPEND A NIGHT IN RYOKAN (DUE: FRIDAY)
+[DEADLINE] [✓] SPEND A NIGHT IN RYOKAN (DUE: 31 MAR 2025 (MON))
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
 Pending item!
-[DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: FRIDAY)
+[DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: 31 MAR 2025 (MON))
 --------------------------------------------------------------------------------
 
 ________________________________________________________________________________
@@ -158,16 +158,16 @@ You've entered an invalid command format!
 ________________________________________________________________________________
 Item(s) in current list:
 1. [TODO] [ ] RIDE A SHINKANSEN
-2. [EVENT] [ ] GO-KART AROUND TOKYO (FROM: WEDNESDAY 1PM TO: 3PM)
+2. [EVENT] [ ] GO-KART AROUND TOKYO (FROM: 6 JAN 2025 (MON) 5:30PM TO: 6 JAN 2025 (MON) 8:30PM)
 3. [TODO] [ ] ENTER UNIVERSAL STUDIOS JAPAN
 4. [TODO] [✓] VISIT AN ARCADE
-5. [EVENT] [✓] MAKE YOUR OWN TAKOYAKI (FROM: SUNDAY 1PM TO: 3PM)
-6. [EVENT] [ ] LEARN THE ART OF TEA CEREMONY (FROM: SEPTEMBER 15TH 9AM TO: 11AM)
+5. [EVENT] [✓] MAKE YOUR OWN TAKOYAKI (FROM: 11 FEB 2025 (TUE) 1PM TO: 11 FEB 2025 (TUE) 3PM)
+6. [EVENT] [ ] LEARN THE ART OF TEA CEREMONY (FROM: 21 FEB 2025 (FRI) 9AM TO: 21 FEB 2025 (FRI) 11:30AM)
 7. [TODO] [✓] VISIT AN IZAKAYA
-8. [EVENT] [ ] GO CHERRY BLOSSOM VIEWING (FROM: TBC 7AM TO: 8AM)
+8. [EVENT] [ ] GO CHERRY BLOSSOM VIEWING (FROM: 30 MAR 2025 (SUN) TO: 31 MAR 2025 (MON))
 9. [TODO] [ ] CLIMB MOUNT FUJI
 10. [TODO] [ ] VISIT BAMBOO FOREST
-11. [DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: FRIDAY)
+11. [DEADLINE] [ ] SPEND A NIGHT IN RYOKAN (DUE: 31 MAR 2025 (MON))
 12. [TODO] [ ] VISIT AN ONSEN
 --------------------------------------------------------------------------------
 

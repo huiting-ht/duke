@@ -2,7 +2,18 @@ package amebot.commands;
 
 import amebot.common.Messages;
 
+/**
+ * UpdateCommand class
+ *
+ * <p>Command to update the status of a task
+ */
 public class UpdateCommand extends Command {
+    /**
+     * UpdateCommand constructor
+     *
+     * @param index       index of the task to be updated
+     * @param commandType type of task status to be updated
+     */
     public UpdateCommand(int index, String commandType) {
         if (index > 0) {
             if (commandType.equalsIgnoreCase("select")) {

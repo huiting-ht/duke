@@ -1,5 +1,9 @@
 package amebot.common;
 
+/**
+ * Title class is used to print the title and welcome message of the program.
+ * It contains the logo and the greeting message.
+ */
 public class Title {
     private static final String BORDER = "================================================================================" + System.lineSeparator();
 
@@ -24,6 +28,9 @@ public class Title {
     private static final String GREETING = "Yokoso, your personal assistant AMEBOT~!" + System.lineSeparator()
             + "Please enter the command(s):";
 
+    /**
+     * Prints the title of the program.
+     */
     public static void printHeader() {
         System.out.print(BORDER
                 + MESSAGE
@@ -31,6 +38,9 @@ public class Title {
                 + BORDER);
     }
 
+    /**
+     * Prints the greeting message.
+     */
     public static void printGreeting() {
         System.out.println(GREETING);
     }

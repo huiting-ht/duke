@@ -1,5 +1,8 @@
 package amebot.common;
 
+/**
+ * Messages class contains all the messages that will be displayed to the user.
+ */
 public class Messages {
     public static final String TOP_BORDER = "________________________________________________________________________________";
     public static final String BOTTOM_BORDER = "--------------------------------------------------------------------------------" + System.lineSeparator();
@@ -12,7 +15,9 @@ public class Messages {
     public static final String EMPTY_LINE = "Current line is empty!";
     public static final String INVALID_COMMAND = "You've entered an invalid command!";
     public static final String INVALID_DESC = "Description is empty!";
-    public static final String INVALID_DESC_DATE = "Description is empty or you've entered an invalid date!";
+    public static final String INVALID_DESC_DATE = "Description is empty or you've entered an invalid format!";
+    public static final String INVALID_DATE = "Invalid dateTime format! Please enter yyyy-MM-dd or dd/MM/yyyy (HHmm is optional)~";
+    public static final String INVALID_DATE_TIME_RANGE = "Invalid date or time range!";
     public static final String INVALID_INDEX = "Index is empty or invalid!";
     public static final String INVALID_INDEX_VALUE = "Index is out of bound! Please select an index from 1 to ";
     public static final String STATUS_SELECTED = "You've completed this item!";

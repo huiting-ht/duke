@@ -1,15 +1,15 @@
 list
 todo Ride a shinkansen
-event Go-kart around Tokyo /from Wednesday 1pm /to 3pm
+event Go-kart around Tokyo /from 2025-01-06 1730 /to 2025-01-06 2030
 todo Enter Universal Studios Japan
 todo Visit an arcade
-event Make your own takoyaki /from Sunday 1pm /to 3pm
-event Learn the art of tea ceremony /from September 15th 9am /to 11am
+event Make your own takoyaki /from 2025-02-11 1300 /to 2025-02-11 1500
+event Learn the art of tea ceremony /from 21/02/2025 0900 /to 21/02/2025 1130
 todo Visit an izakaya
-event Go cherry blossom viewing /from TBC 7am /to 8am
+event Go cherry blossom viewing /from 30/03/2025 /to 31/03/2025
 todo Climb Mount Fuji
 todo Visit bamboo forest
-deadline Spend a night in Ryokan /due Friday
+deadline Spend a night in Ryokan /due 2025-03-31
 todo Visit an Onsen
 todo Test delete method
 list

@@ -1,82 +1,25 @@
 package amebot.parser;
 
 import amebot.common.Messages;
+import amebot.common.Regex;
 import amebot.enumerations.Keyword;
 import amebot.tasks.Task;
 
 import java.util.EnumSet;
 import java.util.ArrayList;
 
+/**
+ * Represents a parser that parses the user's input.
+ */
 public class Parser {
     protected ArrayList<String> parsedCommand = new ArrayList<>();
-    protected final String LIST_REGEX = "^list$";
-    protected final String TODO_REGEX = "^todo(?!\\s*$).+$";
-    protected final String EVENT_REGEX = "^event .+ /from .+ /to .+$";
-    protected final String FROM_REGEX = " /from ";
-    protected final String TO_REGEX = " /to ";
-    protected final String DEADLINE_REGEX = "^deadline .+ /due .+$";
-    protected final String DUE_REGEX = " /due ";
-    protected final String SELECT_INDEX_REGEX = "^(select|unselect) [1-9]\\d*$";
-    protected final String REMOVE_INDEX_REGEX = "^remove [1-9]\\d*$";
-    protected final String BYE_REGEX = "^bye$";
 
-    public ArrayList<String> parseLoadTask(String task) {
-        ArrayList<String> item = new ArrayList<>();
-        String[] words = task.toLowerCase().split("\\|");
-
-        String type = words[0].replaceAll("\\[", "").replaceAll("]", "");
-        Keyword commandType = Keyword.valueOf(type.trim().toUpperCase());
-        item.add(type);
-
-        boolean isSeleted = words[1].contains("✓");
-        item.add(String.valueOf(isSeleted));
-
-        String description = words[2];
-        item.add(description);
-
-        switch (commandType) {
-            case EVENT:
-                String fromDateTime = words[3];
-                String toDateTime = words[4];
-                item.add(fromDateTime);
-                item.add(toDateTime);
-                break;
-            case DEADLINE:
-                String dueDateTIme = words[3];
-                item.add(dueDateTIme);
-                break;
-        }
-
-        return item;
-    }
-
-    public String parseSaveTask(Task task) {
-        String item = "";
-
-        String type = task.getType().replaceAll("\\[", "").replaceAll("]", "");
-        Keyword commandType = Keyword.valueOf(type.trim().toUpperCase());
-
-        String status = task.getStatus();
-        String description = task.getDescription();
-
-        switch (commandType) {
-            case TODO:
-                item = type + "|" + status + "|" + description;
-                break;
-            case EVENT:
-                String fromDateTime = task.getFromDateTime();
-                String toDateTime = task.getToDateTime();
-                item = type + "|" + status + "|" + description + "|" + fromDateTime + "|" + toDateTime;
-                break;
-            case DEADLINE:
-                String dueDateTIme = task.getDueDateTime();
-                item = type + "|" + status + "|" + description + "|" + dueDateTIme;
-                break;
-        }
-
-        return item;
-    }
-
+    /**
+     * Parses the user's input and returns the parsed command.
+     *
+     * @param command The user's input.
+     * @return The parsed command.
+     */
     public ArrayList<String> parseCommand(String command) {
         String[] words = command.trim().split(" ");
         String commandName = words[0].toUpperCase();
@@ -112,6 +55,12 @@ public class Parser {
         return parsedCommand;
     }
 
+    /**
+     * Checks if the command type is valid.
+     *
+     * @param commandName The command name.
+     * @return True if the command type is valid, false otherwise.
+     */
     public boolean isValidCommand(String commandName) {
         EnumSet<Keyword> commandList = EnumSet.allOf(Keyword.class);
 
@@ -126,6 +75,12 @@ public class Parser {
         return false;
     }
 
+    /**
+     * Parses the description of the ToDo task.
+     *
+     * @param commandName The command name.
+     * @param command     The user's input.
+     */
     public void parseTodo(String commandName, String command) {
         if (isValidCommandFormat(command)) {
             parsedCommand.add(commandName);
@@ -136,28 +91,49 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the description and dateTime of the Event task.
+     *
+     * @param commandName The command name.
+     * @param command     The user's input.
+     */
     public void parseEvent(String commandName, String command) {
         if (isValidCommandFormat(command)) {
             parsedCommand.add(commandName);
-            int index = command.indexOf(FROM_REGEX);
+            int index = command.indexOf(Regex.FROM_PATTERN);
             setDescription(command, 6, index);
-            setDateTime(command, index);
+            ArrayList<String> parsedDateTime = new DateTimeParser().parseDateTime(command, index);
+            parsedCommand.addAll(parsedDateTime);
         } else {
             System.out.println(Messages.INVALID_DESC_DATE);
         }
     }
 
+    /**
+     * Parses the description and dateTime of the Deadline task.
+     *
+     * @param commandName The command name.
+     * @param command     The user's input.
+     */
     public void parseDeadline(String commandName, String command) {
         if (isValidCommandFormat(command)) {
             parsedCommand.add(commandName);
-            int index = command.indexOf(DUE_REGEX);
+            int index = command.indexOf(Regex.DUE_PATTERN);
             setDescription(command, 9, index);
-            setDateTime(command, index);
+            ArrayList<String> parsedDateTime = new DateTimeParser().parseDateTime(command, index);
+            parsedCommand.addAll(parsedDateTime);
         } else {
             System.out.println(Messages.INVALID_DESC_DATE);
         }
     }
 
+    /**
+     * Sets the description of the task.
+     *
+     * @param command    The user's input.
+     * @param startIndex The start index of the description.
+     * @param endIndex   The end index of the description.
+     */
     public void setDescription(String command, int startIndex, int endIndex) {
         if (startIndex < endIndex) {
             String description = command.substring(startIndex, endIndex);
@@ -165,47 +141,13 @@ public class Parser {
         }
     }
 
-    public void setDateTime(String command, int index) {
-        int size = command.length();
-        String dateTime = command.substring(index, size);
-
-        if (isValidDate(dateTime)) {
-            splitDateTime(dateTime);
-        }
-    }
-
-    public boolean isValidDate(String date) {
-        boolean isEventDate = date.contains(FROM_REGEX) && date.contains(TO_REGEX);
-        boolean isDeadlineDate = date.contains(DUE_REGEX);
-
-        return isEventDate || isDeadlineDate;
-    }
-
-    public void splitDateTime(String date) {
-        int size = date.length();
-
-        if (date.contains(FROM_REGEX)) {
-            int index = date.indexOf(TO_REGEX);
-
-            String from = date.substring(0, 6).replace('/', '(');
-            String fromTime = date.substring(6, index);
-            String fromDate = from + ":" + fromTime;
-
-            String to = date.substring(index + 1, index + 4).replace('/', ' ');
-            String toTime = date.substring(index + 4, size);
-            String toDate = to + ":" + toTime + ")";
-
-            parsedCommand.add(fromDate);
-            parsedCommand.add(toDate);
-        } else {
-            String dueDate = date.substring(0, 5).replace('/', '(');
-            String dueDateTime = date.substring(5);
-            String due = dueDate + ":" + dueDateTime + ")";
-
-            parsedCommand.add(due);
-        }
-    }
-
+    /**
+     * Parses the index of the task to be updated.
+     *
+     * @param commandName The command name.
+     * @param command     The user's input.
+     * @param words       The user's input split into an array of words.
+     */
     public void parseUpdate(String commandName, String command, String[] words) {
         if (isValidCommandFormat(command)) {
             parsedCommand.add(commandName);
@@ -215,6 +157,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Sets the index of the task to be updated.
+     *
+     * @param index The index of the task to be updated.
+     */
     public void setIndex(String index) {
         int taskIndex = Integer.parseInt(index);
 
@@ -228,19 +175,37 @@ public class Parser {
         }
     }
 
+    /**
+     * Checks if the index of the task to be updated is valid.
+     *
+     * @param taskIndex The index of the task to be updated.
+     * @return True if the index is valid, false otherwise.
+     */
     public boolean isValidIndex(int taskIndex) {
         return taskIndex <= Task.getListSize();
     }
 
+    /**
+     * Parses and sets the command type.
+     *
+     * @param commandName The command name.
+     * @param command     The user's input.
+     */
     public void parseDefault(String commandName, String command) {
         if (isValidCommandFormat(command)) {
             parsedCommand.add(commandName);
         }
     }
 
+    /**
+     * Checks if the command format is valid.
+     *
+     * @param command The user's input.
+     * @return True if the command format is valid, false otherwise.
+     */
     public boolean isValidCommandFormat(String command) {
-        return command.matches(TODO_REGEX) || command.matches(EVENT_REGEX) || command.matches(DEADLINE_REGEX) ||
-                command.matches(SELECT_INDEX_REGEX) || command.matches(LIST_REGEX) ||
-                command.matches(REMOVE_INDEX_REGEX) || command.matches(BYE_REGEX);
+        return command.matches(Regex.TODO_COMMAND) || command.matches(Regex.EVENT_COMMAND) || command.matches(Regex.DEADLINE_COMMAND) ||
+                command.matches(Regex.SELECT_INDEX_COMMAND) || command.matches(Regex.LIST_COMMAND) ||
+                command.matches(Regex.REMOVE_INDEX_COMMAND) || command.matches(Regex.BYE_COMMAND);
     }
 }

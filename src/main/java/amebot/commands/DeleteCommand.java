@@ -2,7 +2,17 @@ package amebot.commands;
 
 import amebot.common.Messages;
 
+/**
+ * DeleteCommand class
+ *
+ * <p>Command to delete a task
+ */
 public class DeleteCommand extends Command {
+    /**
+     * DeleteCommand constructor
+     *
+     * @param index index of the task to be deleted
+     */
     public DeleteCommand(int index) {
         if (index > -1 && index <= tasks.size()) {
             logs.add(tasks.get(index - 1).getTask());
@@ -11,6 +21,9 @@ public class DeleteCommand extends Command {
         }
     }
 
+    /**
+     * Saves the logs for output
+     */
     public void saveOutput() {
         logs.add(Messages.SUCCESS_REMOVE_MESSAGE);
         logs.add(tasks.size() + Messages.CURRENT_LIST);
