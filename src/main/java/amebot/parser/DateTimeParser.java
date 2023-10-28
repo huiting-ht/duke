@@ -12,21 +12,27 @@ import java.util.ArrayList;
  * DateTimeParser class is used to parse the date and time of the task.
  */
 public class DateTimeParser extends Parser {
+    private static final int START_INDEX = 0;
+    private static final int END_INDEX_OF_FROM = 6;
+    private static final int START_INDEX_OF_FROM_DATETIME = 7;
+    private static final int END_INDEX_OF_DUE = 5;
+    private static final int START_INDEX_OF_DUE_DATETIME = 6;
+
     /**
      * Parses the date and time of the task.
      *
-     * @param command The user's input.
-     * @param index   The index of the date and time in the command.
+     * @param command    The user's input.
+     * @param startIndex The starting index of the date and time in the command.
+     * @param endIndex   The ending index of the date and time in the command.
      * @return An ArrayList of the parsed date and time.
      */
-    public ArrayList<String> parseDateTime(String command, int index) {
-        int size = command.length();
-        String dateTime = command.substring(index, size);
+    public ArrayList<String> parseDateTime(String command, int startIndex, int endIndex) {
+        String dateTime = command.substring(startIndex, endIndex);
 
-        if (isValidDateTime(dateTime)) {
-            splitDateTime(dateTime);
-        } else {
+        if (!isValidDateTimeFormat(dateTime)) {
             System.out.println(Messages.INVALID_DATE);
+        } else {
+            splitDateTime(dateTime);
         }
 
         return parsedCommand;
@@ -38,7 +44,7 @@ public class DateTimeParser extends Parser {
      * @param dateTime The date and time of the task.
      * @return A boolean value to indicate if the date and time format of the task is valid.
      */
-    public boolean isValidDateTime(String dateTime) {
+    public boolean isValidDateTimeFormat(String dateTime) {
         boolean isEventDateTime = dateTime.matches(Regex.FROM_PATTERN + Regex.DATE_TIME_PATTERN + Regex.TO_PATTERN + Regex.DATE_TIME_PATTERN);
         boolean isDeadlineDateTime = dateTime.matches(Regex.DUE_PATTERN + Regex.DATE_TIME_PATTERN);
 
@@ -46,31 +52,35 @@ public class DateTimeParser extends Parser {
     }
 
     /**
-     * Splits the date and time of the task into the start date and time and end date and time.
+     * Splits the date and time of the task into the start date and time and
+     * end date and time.
      *
      * @param dateTime The date and time of the task.
      */
     public void splitDateTime(String dateTime) {
-        int size = dateTime.length();
+        final int END_INDEX = dateTime.length();
 
         if (dateTime.contains(Regex.FROM_PATTERN)) {
-            int index = dateTime.indexOf(Regex.TO_PATTERN);
+            final int END_INDEX_OF_FROM_DATETIME = dateTime.indexOf(Regex.TO_PATTERN);
 
-            String from = dateTime.substring(0, 6).replace('/', '(');
-            String fromDate = dateTime.substring(7, index);
+            String from = dateTime.substring(START_INDEX, END_INDEX_OF_FROM).replace('/', '(');
+            String fromDate = dateTime.substring(START_INDEX_OF_FROM_DATETIME, END_INDEX_OF_FROM_DATETIME);
             String parsedFromDateTime = parseDateTime(fromDate);
             String fromDateTime = from + ": " + parsedFromDateTime;
 
-            String to = dateTime.substring(index + 1, index + 4).replace('/', ' ');
-            String toDate = dateTime.substring(index + 5, size);
+            final int START_INDEX_OF_TO = END_INDEX_OF_FROM_DATETIME + 1;
+            final int END_INDEX_OF_TO = END_INDEX_OF_FROM_DATETIME + 4;
+            String to = dateTime.substring(START_INDEX_OF_TO, END_INDEX_OF_TO).replace('/', ' ');
+            final int START_INDEX_OF_TO_DATETIME = END_INDEX_OF_FROM_DATETIME + 5;
+            String toDate = dateTime.substring(START_INDEX_OF_TO_DATETIME, END_INDEX);
             String parsedToDateTime = parseDateTime(toDate);
             String toDateTime = to + ": " + parsedToDateTime + ")";
 
             parsedCommand.add(fromDateTime);
             parsedCommand.add(toDateTime);
         } else {
-            String due = dateTime.substring(0, 5).replace('/', '(');
-            String dueDate = dateTime.substring(6);
+            String due = dateTime.substring(START_INDEX, END_INDEX_OF_DUE).replace('/', '(');
+            String dueDate = dateTime.substring(START_INDEX_OF_DUE_DATETIME, END_INDEX);
             String parsedDueDateTime = parseDateTime(dueDate);
             String dueDateTime = due + ": " + parsedDueDateTime + ")";
 
@@ -98,9 +108,9 @@ public class DateTimeParser extends Parser {
 
         if (size == 2) {
             return getDateTime(dateTime, dateTimeFormatter);
-        } else {
-            return getDate(dateTime, dateTimeFormatter);
         }
+
+        return getDate(dateTime, dateTimeFormatter);
     }
 
     /**

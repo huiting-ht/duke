@@ -7,24 +7,23 @@ public abstract class Task {
     protected String type;
     protected String description;
     protected String status;
-    protected final String SELECT = "[✓] ";
-    protected final String UNSELECT = "[ ] ";
+    protected static final String MARK = "[✓] ";
+    protected static final String UNMARK = "[ ] ";
     protected static int listSize;
 
     /**
      * Creates a task.
      *
-     * @param isSelected  Whether the task is selected.
+     * @param isMarked    Whether the task is marked.
      * @param description The description of the task.
      */
-    public Task(boolean isSelected, String description) {
-        type = "";
+    public Task(boolean isMarked, String description) {
         this.description = description.toUpperCase();
 
-        if (isSelected) {
-            status = SELECT;
+        if (isMarked) {
+            status = MARK;
         } else {
-            status = UNSELECT;
+            status = UNMARK;
         }
 
         listSize++;
@@ -53,10 +52,10 @@ public abstract class Task {
     /**
      * Set the description of the task.
      *
-     * @param desc The description of the task.
+     * @param description The description of the task.
      */
-    public void setDescription(String desc) {
-        this.description = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -69,17 +68,17 @@ public abstract class Task {
     }
 
     /**
-     * Set the status of the task to selected.
+     * Set the status of the task as mark.
      */
-    public void setSelectStatus() {
-        this.status = SELECT;
+    public void setStatusAsMark() {
+        this.status = MARK;
     }
 
     /**
-     * Set the status of the task to unselected.
+     * Set the status of the task as unmark.
      */
-    public void setUnselectStatus() {
-        this.status = UNSELECT;
+    public void setStatusAsUnmark() {
+        this.status = UNMARK;
     }
 
     /**
@@ -91,22 +90,10 @@ public abstract class Task {
         return status;
     }
 
-    public String getFromDateTime() {
-        return "";
-    }
-
-    public String getToDateTime() {
-        return "";
-    }
-
-    public String getDueDateTime() {
-        return "";
-    }
-
     /**
-     * Get the size of the list.
+     * Get the size of the task list.
      *
-     * @return The size of the list.
+     * @return The size of the task list.
      */
     public static int getListSize() {
         return listSize;

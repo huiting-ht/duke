@@ -12,6 +12,9 @@ import java.util.ArrayList;
  * Represents a parser that parses the user's input.
  */
 public class Parser {
+    private static final int START_INDEX_OF_TODO = 5;
+    private static final int START_INDEX_OF_EVENT = 6;
+    private static final int START_INDEX_OF_DEADLINE = 9;
     protected ArrayList<String> parsedCommand = new ArrayList<>();
 
     /**
@@ -21,35 +24,38 @@ public class Parser {
      * @return The parsed command.
      */
     public ArrayList<String> parseCommand(String command) {
-        String[] words = command.trim().split(" ");
-        String commandName = words[0].toUpperCase();
+        int endIndex = command.length();
+        String[] taskDetail = command.trim().split(" ");
+        String commandName = taskDetail[0].toUpperCase();
 
-        if (isValidCommand(commandName)) {
+        if (!isValidCommandType(commandName)) {
+            System.out.println(Messages.INVALID_COMMAND);
+        } else {
             Keyword commandType = Keyword.valueOf(commandName);
 
             switch (commandType) {
                 case TODO:
-                    parseTodo(commandName, command);
+                    parseTodo(commandName, command, endIndex);
                     break;
                 case EVENT:
-                    parseEvent(commandName, command);
+                    parseEvent(commandName, command, endIndex);
                     break;
                 case DEADLINE:
-                    parseDeadline(commandName, command);
+                    parseDeadline(commandName, command, endIndex);
                     break;
-                case SELECT:
+                case MARK:
                     // Fallthrough
-                case UNSELECT:
+                case UNMARK:
                     // Fallthrough
                 case REMOVE:
-                    parseUpdate(commandName, command, words);
+                    parseMarkStatusOrRemove(commandName, command, taskDetail);
                     break;
-                default:
-                    parseDefault(commandName, command);
+                case LIST:
+                    // Fallthrough
+                case BYE:
+                    parseListOrBye(commandName, command);
                     break;
             }
-        } else {
-            System.out.println(Messages.INVALID_COMMAND);
         }
 
         return parsedCommand;
@@ -61,7 +67,7 @@ public class Parser {
      * @param commandName The command name.
      * @return True if the command type is valid, false otherwise.
      */
-    public boolean isValidCommand(String commandName) {
+    public boolean isValidCommandType(String commandName) {
         EnumSet<Keyword> commandList = EnumSet.allOf(Keyword.class);
 
         for (Keyword commandType : commandList) {
@@ -80,15 +86,18 @@ public class Parser {
      *
      * @param commandName The command name.
      * @param command     The user's input.
+     * @param endIndex    The end index of the command.
      */
-    public void parseTodo(String commandName, String command) {
-        if (isValidCommandFormat(command)) {
-            parsedCommand.add(commandName);
-            int size = command.length();
-            setDescription(command, 5, size);
-        } else {
+    public void parseTodo(String commandName, String command, int endIndex) {
+        boolean isToDo = command.matches(Regex.TODO_COMMAND);
+
+        if (!isToDo) {
             System.out.println(Messages.INVALID_DESC);
+            return;
         }
+
+        parsedCommand.add(commandName);
+        setDescription(command, START_INDEX_OF_TODO, endIndex);
     }
 
     /**
@@ -96,17 +105,22 @@ public class Parser {
      *
      * @param commandName The command name.
      * @param command     The user's input.
+     * @param endIndex    The end index of the command.
      */
-    public void parseEvent(String commandName, String command) {
-        if (isValidCommandFormat(command)) {
-            parsedCommand.add(commandName);
-            int index = command.indexOf(Regex.FROM_PATTERN);
-            setDescription(command, 6, index);
-            ArrayList<String> parsedDateTime = new DateTimeParser().parseDateTime(command, index);
-            parsedCommand.addAll(parsedDateTime);
-        } else {
+    public void parseEvent(String commandName, String command, int endIndex) {
+        boolean isEvent = command.matches(Regex.EVENT_COMMAND);
+
+        if (!isEvent) {
             System.out.println(Messages.INVALID_DESC_DATE);
+            return;
         }
+
+        parsedCommand.add(commandName);
+        int startIndexOfFromDateTime = command.indexOf(Regex.FROM_PATTERN);
+        setDescription(command, START_INDEX_OF_EVENT, startIndexOfFromDateTime);
+
+        ArrayList<String> parsedDateTime = new DateTimeParser().parseDateTime(command, startIndexOfFromDateTime, endIndex);
+        parsedCommand.addAll(parsedDateTime);
     }
 
     /**
@@ -114,17 +128,22 @@ public class Parser {
      *
      * @param commandName The command name.
      * @param command     The user's input.
+     * @param endIndex    The end index of the command.
      */
-    public void parseDeadline(String commandName, String command) {
-        if (isValidCommandFormat(command)) {
-            parsedCommand.add(commandName);
-            int index = command.indexOf(Regex.DUE_PATTERN);
-            setDescription(command, 9, index);
-            ArrayList<String> parsedDateTime = new DateTimeParser().parseDateTime(command, index);
-            parsedCommand.addAll(parsedDateTime);
-        } else {
+    public void parseDeadline(String commandName, String command, int endIndex) {
+        boolean isDeadline = command.matches(Regex.DEADLINE_COMMAND);
+
+        if (!isDeadline) {
             System.out.println(Messages.INVALID_DESC_DATE);
+            return;
         }
+
+        parsedCommand.add(commandName);
+        int startIndexOfDueDateTime = command.indexOf(Regex.DUE_PATTERN);
+        setDescription(command, START_INDEX_OF_DEADLINE, startIndexOfDueDateTime);
+
+        ArrayList<String> parsedDateTime = new DateTimeParser().parseDateTime(command, startIndexOfDueDateTime, endIndex);
+        parsedCommand.addAll(parsedDateTime);
     }
 
     /**
@@ -135,23 +154,29 @@ public class Parser {
      * @param endIndex   The end index of the description.
      */
     public void setDescription(String command, int startIndex, int endIndex) {
-        if (startIndex < endIndex) {
-            String description = command.substring(startIndex, endIndex);
-            parsedCommand.add(description);
+        if (startIndex > endIndex) {
+            return;
         }
+
+        String description = command.substring(startIndex, endIndex);
+        parsedCommand.add(description);
     }
 
     /**
-     * Parses the index of the task to be updated.
+     * Parses the index of the task to be mark/unmark/remove.
      *
      * @param commandName The command name.
      * @param command     The user's input.
-     * @param words       The user's input split into an array of words.
+     * @param taskDetail  The user's input split into an array of task detail.
      */
-    public void parseUpdate(String commandName, String command, String[] words) {
-        if (isValidCommandFormat(command)) {
+    public void parseMarkStatusOrRemove(String commandName, String command, String[] taskDetail) {
+        boolean isMarkStatus = command.matches(Regex.MARK_INDEX_COMMAND);
+        boolean isRemove = command.matches(Regex.REMOVE_INDEX_COMMAND);
+
+        if (isMarkStatus || isRemove) {
             parsedCommand.add(commandName);
-            setIndex(words[1]);
+            int taskIndex = Integer.parseInt(taskDetail[1]);
+            setIndex(taskIndex);
         } else {
             System.out.println(Messages.INVALID_INDEX);
         }
@@ -160,52 +185,35 @@ public class Parser {
     /**
      * Sets the index of the task to be updated.
      *
-     * @param index The index of the task to be updated.
+     * @param taskIndex The index of the task to be updated.
      */
-    public void setIndex(String index) {
-        int taskIndex = Integer.parseInt(index);
+    public void setIndex(int taskIndex) {
+        boolean isValidIndex = taskIndex <= Task.getListSize();
 
-        if (isValidIndex(taskIndex)) {
-            parsedCommand.add(index);
-        } else {
-            parsedCommand.add("-1");
+        if (!isValidIndex) {
             System.out.println(Messages.INVALID_INDEX_VALUE
                     + Task.getListSize()
                     + "!");
+            return;
         }
+
+        parsedCommand.add(String.valueOf(taskIndex));
     }
 
     /**
-     * Checks if the index of the task to be updated is valid.
-     *
-     * @param taskIndex The index of the task to be updated.
-     * @return True if the index is valid, false otherwise.
-     */
-    public boolean isValidIndex(int taskIndex) {
-        return taskIndex <= Task.getListSize();
-    }
-
-    /**
-     * Parses and sets the command type.
+     * Parses the list or bye command.
      *
      * @param commandName The command name.
      * @param command     The user's input.
      */
-    public void parseDefault(String commandName, String command) {
-        if (isValidCommandFormat(command)) {
-            parsedCommand.add(commandName);
-        }
-    }
+    public void parseListOrBye(String commandName, String command) {
+        boolean isList = command.matches(Regex.LIST_COMMAND);
+        boolean isBye = command.matches(Regex.BYE_COMMAND);
 
-    /**
-     * Checks if the command format is valid.
-     *
-     * @param command The user's input.
-     * @return True if the command format is valid, false otherwise.
-     */
-    public boolean isValidCommandFormat(String command) {
-        return command.matches(Regex.TODO_COMMAND) || command.matches(Regex.EVENT_COMMAND) || command.matches(Regex.DEADLINE_COMMAND) ||
-                command.matches(Regex.SELECT_INDEX_COMMAND) || command.matches(Regex.LIST_COMMAND) ||
-                command.matches(Regex.REMOVE_INDEX_COMMAND) || command.matches(Regex.BYE_COMMAND);
+        if (isList || isBye) {
+            parsedCommand.add(commandName);
+        } else {
+            System.out.println(Messages.INVALID_COMMAND);
+        }
     }
 }

@@ -9,13 +9,13 @@ import amebot.commands.ExitCommand;
 import java.util.ArrayList;
 
 /**
- * The main class of the Duke application.
+ * The main class of the application.
  */
 public class Amebot {
     private UserInterface userInterface;
 
     /**
-     * The main method of the Duke application.
+     * The main method of the application.
      *
      * @param args The arguments passed in.
      */
@@ -25,28 +25,26 @@ public class Amebot {
     }
 
     /**
-     * Launches the Duke application.
+     * Launches the application.
      */
     public void launch() {
         this.userInterface = new UserInterface();
         this.userInterface.printWelcome();
 
-        Command command = new Command();
         Storage storage = new Storage();
-        storage.loadTasks(command);
+        storage.loadTasks();
 
-        render(command);
+        render();
 
         storage.saveTasks();
     }
 
     /**
-     * Renders the Duke application.
-     *
-     * @param command The command to be executed.
+     * Renders the application.
      */
-    public void render(Command command) {
-        String commandLine;
+    public void render() {
+        String commandLine = "";
+        Command command = new Command();
 
         do {
             commandLine = this.userInterface.getInputCommand();

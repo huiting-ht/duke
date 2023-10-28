@@ -4,20 +4,20 @@ package amebot.tasks;
  * Represents an Event task.
  */
 public class Event extends Task {
-    protected final String EVENT = "[EVENT] ";
+    protected static final String EVENT = "[EVENT] ";
     protected String fromDateTime;
     protected String toDateTime;
 
     /**
      * Creates an Event task.
      *
-     * @param isSelected   Whether the task is selected.
+     * @param isMarked     Whether the task is marked.
      * @param description  The description of the task.
      * @param fromDateTime The starting date and time of the event.
      * @param toDateTime   The ending date and time of the event.
      */
-    public Event(boolean isSelected, String description, String fromDateTime, String toDateTime) {
-        super(isSelected, description);
+    public Event(boolean isMarked, String description, String fromDateTime, String toDateTime) {
+        super(isMarked, description);
         super.type = EVENT;
         this.fromDateTime = fromDateTime.toUpperCase();
         this.toDateTime = toDateTime.toUpperCase();
@@ -34,13 +34,30 @@ public class Event extends Task {
     }
 
     /**
+     * Set the starting date and time of the event.
+     *
+     * @param fromDateTime The starting date and time of the event.
+     */
+    public void setFromDateTime(String fromDateTime) {
+        this.fromDateTime = fromDateTime;
+    }
+
+    /**
      * Get the starting date and time of the event.
      *
      * @return The starting date and time of the event.
      */
-    @Override
     public String getFromDateTime() {
         return fromDateTime;
+    }
+
+    /**
+     * Set the ending date and time of the event.
+     *
+     * @param toDateTime The ending date and time of the event.
+     */
+    public void setToDateTime(String toDateTime) {
+        this.toDateTime = toDateTime;
     }
 
     /**
@@ -48,7 +65,6 @@ public class Event extends Task {
      *
      * @return The ending date and time of the event.
      */
-    @Override
     public String getToDateTime() {
         return toDateTime;
     }

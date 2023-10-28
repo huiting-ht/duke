@@ -14,36 +14,7 @@ import java.util.ArrayList;
 
 public class Command {
     protected static ArrayList<Task> tasks = new ArrayList<>();
-    protected static ArrayList<String> logs;
-
-    /**
-     * Executes the command from the loaded file
-     *
-     * @param parsedTask parsed task from the loaded file
-     * @return logs for output
-     */
-    public void executeLoadTaskCommand(ArrayList<String> parsedTask) {
-        logs = new ArrayList<>();
-
-        Keyword commandType = Keyword.valueOf(parsedTask.get(0).trim().toUpperCase());
-        boolean isSelected = Boolean.parseBoolean(parsedTask.get(1));
-        String description = parsedTask.get(2);
-
-        switch (commandType) {
-            case TODO:
-                new AddCommand(isSelected, description);
-                break;
-            case EVENT:
-                String fromDateTime = parsedTask.get(3);
-                String toDateTime = parsedTask.get(4);
-                new AddCommand(isSelected, description, fromDateTime, toDateTime);
-                break;
-            case DEADLINE:
-                String dueTime = parsedTask.get(3);
-                new AddCommand(isSelected, description, dueTime);
-                break;
-        }
-    }
+    protected static ArrayList<String> logs = new ArrayList<>();
 
     /**
      * Executes the command from the user input
@@ -56,35 +27,33 @@ public class Command {
 
         if (!parsedCommand.isEmpty()) {
             Keyword commandType = Keyword.valueOf(parsedCommand.get(0));
-            boolean isSelected = false;
+            boolean isMarked = false;
             String description;
             int index;
 
             switch (commandType) {
                 case TODO:
                     description = parsedCommand.get(1);
-                    new AddCommand(isSelected, description);
+                    new AddCommand(isMarked, description);
                     break;
                 case EVENT:
                     description = parsedCommand.get(1);
-                    if (parsedCommand.size() == 4) {
-                        String fromDateTime = parsedCommand.get(2);
-                        String toDateTime = parsedCommand.get(3);
-                        new AddCommand(isSelected, description, fromDateTime, toDateTime);
-                    }
+                    String fromDateTime = parsedCommand.get(2);
+                    String toDateTime = parsedCommand.get(3);
+                    new AddCommand(isMarked, description, fromDateTime, toDateTime);
                     break;
                 case DEADLINE:
                     description = parsedCommand.get(1);
-                    if (parsedCommand.size() == 3) {
-                        String dueTime = parsedCommand.get(2);
-                        new AddCommand(isSelected, description, dueTime);
-                    }
+                    String dueTime = parsedCommand.get(2);
+                    new AddCommand(isMarked, description, dueTime);
                     break;
-                case SELECT:
-                    // Fallthrough
-                case UNSELECT:
+                case MARK:
                     index = Integer.parseInt(parsedCommand.get(1));
-                    new UpdateCommand(index, commandType.toString());
+                    new MarkCommand(index);
+                    break;
+                case UNMARK:
+                    index = Integer.parseInt(parsedCommand.get(1));
+                    new UnmarkCommand(index);
                     break;
                 case REMOVE:
                     index = Integer.parseInt(parsedCommand.get(1));

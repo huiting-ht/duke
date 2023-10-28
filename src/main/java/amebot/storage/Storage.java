@@ -1,8 +1,7 @@
 package amebot.storage;
 
-import amebot.commands.Command;
 import amebot.common.Messages;
-import amebot.parser.StorageParser;
+import amebot.commands.Command;
 import amebot.tasks.Task;
 
 import java.io.File;
@@ -10,30 +9,57 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.io.IOException;
 
 /**
  * Storage class handles the loading of tasks from the file and
  * saving of tasks to the file.
  */
 public class Storage {
-    private static final String filePathname = "./src/main/java/data/amebot.txt";
-    private File tasksFile = new File(filePathname);
+    protected static final String FILE_PATHNAME = "./src/main/java/data/amebot.txt";
+    private File tasksFile = new File(FILE_PATHNAME);
 
     /**
-     * Loads tasks from the file if the file exists.
+     * Loads tasks from the file.
+     */
+    public void loadTasks() {
+        if (!isTasksFileFound() || isTasksFileEmpty()) {
+            return;
+        }
+
+        try {
+            FileReader tasksFileReader = new FileReader(tasksFile);
+            BufferedReader bufferedReader = new BufferedReader(tasksFileReader);
+            String task = "";
+
+            while ((task = bufferedReader.readLine()) != null) {
+                TaskDecoder.decodeTask(task);
+            }
+
+            System.out.println(Messages.SUCCESS_LOAD_TASK);
+
+            bufferedReader.close();
+            tasksFileReader.close();
+        } catch (IOException err) {
+            System.out.println((Messages.ERROR_MESSAGE));
+        }
+    }
+
+    /**
+     * Checks if the file exists.
      * If the file does not exist, a new file will be created.
      *
-     * @param command Command object that executes the load task command.
+     * @return True if the file exists, false otherwise.
      */
-    public void loadTasks(Command command) {
-        if (findTasksFile()) {
-            ArrayList<String> tasksList = getTasksFileData();
-            storeTasks(command, tasksList);
-        } else {
-            createNewTasksFile();
+    public boolean isTasksFileFound() {
+        if (tasksFile.exists()) {
+            return true;
         }
+
+        System.out.println(Messages.FILE_NOT_FOUND);
+        createNewTasksFile();
+        return false;
     }
 
     /**
@@ -41,7 +67,8 @@ public class Storage {
      */
     public void createNewTasksFile() {
         try {
-            if (tasksFile.createNewFile()) {
+            boolean isCreated = tasksFile.createNewFile();
+            if (isCreated) {
                 System.out.println(Messages.FILE_CREATED);
             }
         } catch (IOException err) {
@@ -50,80 +77,17 @@ public class Storage {
     }
 
     /**
-     * Checks if the file exists.
-     *
-     * @return True if the file exists, false otherwise.
-     */
-    public boolean findTasksFile() {
-        boolean isFileFound = false;
-
-        if (tasksFile.exists()) {
-            isFileFound = true;
-        } else {
-            System.out.println(Messages.FILE_NOT_FOUND);
-        }
-
-        return isFileFound;
-    }
-
-    /**
-     * Reads the data from the file and stores it in an ArrayList.
-     *
-     * @return ArrayList of tasks in the file.
-     */
-    public ArrayList<String> getTasksFileData() {
-        ArrayList<String> tasksList = new ArrayList<>();
-
-        if (!isFileEmpty()) {
-            try {
-                FileReader tasksFileReader = new FileReader(tasksFile);
-                BufferedReader bufferedReader = new BufferedReader(tasksFileReader);
-                String task = "";
-
-                while ((task = bufferedReader.readLine()) != null) {
-                    tasksList.add(task);
-                }
-
-                bufferedReader.close();
-                tasksFileReader.close();
-            } catch (IOException err) {
-                System.out.println((Messages.ERROR_MESSAGE));
-            }
-        }
-
-        return tasksList;
-    }
-
-    /**
      * Checks if the file is empty.
      *
      * @return True if the file is empty, false otherwise.
      */
-    public boolean isFileEmpty() {
-        boolean isFileEmpty = false;
-
+    public boolean isTasksFileEmpty() {
         if (tasksFile.length() == 0) {
-            isFileEmpty = true;
             System.out.println((Messages.EMPTY_FILE));
+            return true;
         }
 
-        return isFileEmpty;
-    }
-
-    /**
-     * Get tasks in the file and
-     * execute command to store tasks.
-     *
-     * @param command   Command object that executes the load task command.
-     * @param tasksList ArrayList of tasks in the file.
-     */
-    public void storeTasks(Command command, ArrayList<String> tasksList) {
-        for (String task : tasksList) {
-            ArrayList<String> parsedTask = new StorageParser().parseLoadTask(task);
-            command.executeLoadTaskCommand(parsedTask);
-        }
-
-        System.out.println(Messages.SUCCESS_LOAD_TASK);
+        return false;
     }
 
     /**
@@ -131,16 +95,16 @@ public class Storage {
      */
     public void saveTasks() {
         ArrayList<Task> tasksList = Command.getTasks();
-        String item = "";
+        String taskDetail = "";
 
         try {
             FileWriter tasksFileWriter = new FileWriter(tasksFile);
             BufferedWriter bufferedWriter = new BufferedWriter(tasksFileWriter);
 
             for (Task task : tasksList) {
-                item = new StorageParser().parseSaveTask(task);
+                taskDetail = TaskEncoder.encodeTask(task);
 
-                bufferedWriter.write(item);
+                bufferedWriter.write(taskDetail);
                 bufferedWriter.newLine();
             }
 

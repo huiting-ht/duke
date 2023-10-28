@@ -14,7 +14,9 @@ public class DeleteCommand extends Command {
      * @param index index of the task to be deleted
      */
     public DeleteCommand(int index) {
-        if (index > -1 && index <= tasks.size()) {
+        boolean isValidIndex = index > 0 && index <= tasks.size();
+
+        if (isValidIndex) {
             logs.add(tasks.get(index - 1).getTask());
             tasks.remove(index - 1);
             saveOutput();

@@ -17,11 +17,11 @@ public class AddCommand extends Command {
     /**
      * AddCommand constructor
      *
-     * @param isSelected  status of the task
+     * @param isMarked    status of the task
      * @param description description of the task
      */
-    public AddCommand(boolean isSelected, String description) {
-        item = new ToDo(isSelected, description);
+    public AddCommand(boolean isMarked, String description) {
+        item = new ToDo(isMarked, description);
         tasks.add(item);
         saveLogs();
     }
@@ -29,13 +29,13 @@ public class AddCommand extends Command {
     /**
      * AddCommand constructor for event
      *
-     * @param isSelected   status of the task
+     * @param isMarked     status of the task
      * @param description  description of the task
      * @param fromDateTime start date and time of the task
      * @param toDateTime   end date and time of the task
      */
-    public AddCommand(boolean isSelected, String description, String fromDateTime, String toDateTime) {
-        item = new Event(isSelected, description, fromDateTime, toDateTime);
+    public AddCommand(boolean isMarked, String description, String fromDateTime, String toDateTime) {
+        item = new Event(isMarked, description, fromDateTime, toDateTime);
         tasks.add(item);
         saveLogs();
     }
@@ -43,12 +43,12 @@ public class AddCommand extends Command {
     /**
      * AddCommand constructor for deadline
      *
-     * @param isSelected  status of the task
+     * @param isMarked    status of the task
      * @param description description of the task
      * @param dueDateTime due date and time of the task
      */
-    public AddCommand(boolean isSelected, String description, String dueDateTime) {
-        item = new Deadline(isSelected, description, dueDateTime);
+    public AddCommand(boolean isMarked, String description, String dueDateTime) {
+        item = new Deadline(isMarked, description, dueDateTime);
         tasks.add(item);
         saveLogs();
     }

@@ -4,16 +4,16 @@ package amebot.tasks;
  * Represents a ToDo task.
  */
 public class ToDo extends Task {
-    protected final String TODO = "[TODO] ";
+    protected static final String TODO = "[TODO] ";
 
     /**
      * Creates a ToDo task.
      *
-     * @param isSelected  Whether the task is selected.
+     * @param isMarked    Whether the task is marked.
      * @param description The description of the task.
      */
-    public ToDo(boolean isSelected, String description) {
-        super(isSelected, description);
+    public ToDo(boolean isMarked, String description) {
+        super(isMarked, description);
         super.type = TODO;
     }
 

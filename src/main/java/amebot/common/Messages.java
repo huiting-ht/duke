@@ -18,10 +18,11 @@ public class Messages {
     public static final String INVALID_DESC_DATE = "Description is empty or you've entered an invalid format!";
     public static final String INVALID_DATE = "Invalid dateTime format! Please enter yyyy-MM-dd or dd/MM/yyyy (HHmm is optional)~";
     public static final String INVALID_DATE_TIME_RANGE = "Invalid date or time range!";
-    public static final String INVALID_INDEX = "Index is empty or invalid!";
+    public static final String INVALID_DATE_TIME = "From dateTime must be earlier than To dateTime!";
+    public static final String INVALID_INDEX = "Index is invalid!";
     public static final String INVALID_INDEX_VALUE = "Index is out of bound! Please select an index from 1 to ";
-    public static final String STATUS_SELECTED = "You've completed this item!";
-    public static final String STATUS_UNSELECTED = "Pending item";
+    public static final String STATUS_MARKED = "You've completed this item!";
+    public static final String STATUS_UNMARKED = "Pending item";
     public static final String EMPTY_LIST = "List is empty!";
     public static final String SUCCESS_ADD_MESSAGE = "Successfully added to list!";
     public static final String SUCCESS_REMOVE_MESSAGE = "Successfully removed from list!";
