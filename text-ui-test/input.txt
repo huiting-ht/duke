@@ -13,15 +13,15 @@ deadline Spend a night in Ryokan /due 2025-03-31
 todo Visit an Onsen
 todo Test delete method
 list
-select 4
-select 5
-select 7
-select 11
-unselect 11
+mark 4
+mark 5
+mark 7
+mark 11
+unmark 11
 remove 13
 
 abc
 todo
-select
+mark
 list
 bye
